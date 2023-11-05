@@ -1,0 +1,103 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem;
+  text-align: center;
+  border: 1px solid black;
+  z-index: 0;
+  border-radius: 1rem;
+  flex-direction: column;
+  transition: box-shadow .2s;
+}
+
+ p {
+  font-size: 20px;
+  color:#fff;
+}
+.btns{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.numbcardholder{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.numbcards{
+  border: 0.5px solid #787C9A;
+  margin-right: 15px;
+  border-radius: 5px;
+  width: 35px;
+  height:35px;
+  padding: 5px;
+  color:  #787C9A;
+  font-weight: 500;
+  cursor: pointer;
+  
+}
+
+.numbcards:hover {
+  border-color: #646cff;
+}
+
+.numbcards::before{
+ 
+    content: '';
+    background-color: aliceblue;
+    border-radius: 50%;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: scale(0.001, 0.001);
+  }
+  &:focus {
+    outline: 0;
+    color: #fff;
+    &:before {
+      animation: effect_dylan 0.8s ease-out;
+    }
+  
+}
+
+.numbcards:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #D0CBF3;
+}
+
+.modalbtn{
+  border-radius: 3px;
+  border: 1px solid transparent;
+  padding: 9px 19px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 30px;
+
+}
+
+.modalbtn:hover {
+  border-color: #646cff;
+}
+.modalbtn:focus,
+.modalbtn:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
