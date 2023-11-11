@@ -1,70 +1,73 @@
-import { useState, useRef } from 'react'
-import './App.css'
-import { SocialIcon } from 'react-social-icons'
+import { useState } from 'react';
+import './App.css';
+import { SocialIcon } from 'react-social-icons';
+import toast, { Toaster } from 'react-hot-toast';
+
+interface SocialMediaProfile {
+  key: number;
+  url: string;
+  onClick: (e: React.MouseEvent) => void;
+}
 
 function App() {
-  const [urlToShare, setUrlToShare] = useState<string>(''); // Your URL
+  const [urlToShare, setUrlToShare] = useState<string>('');
 
-  const generateShareableLink = () => {
-    const urlToShare = 'https://example.com'; // Replace with your URL
-
-    const shareableLink = `https://example.com/share?url=${encodeURIComponent(urlToShare)}`;
-
-    setUrlToShare(shareableLink);
-  };
-
-  const copyToClipboard = () => {
-    if (urlToShare) {
-      navigator.clipboard.writeText(urlToShare)
-        .then(() => {
-          alert('Link copied to clipboard!');
-        })
-        .catch((error) => {
-          console.error('Copy failed: ', error);
-        });
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(urlToShare);
+      toast('Link copied to clipboard!')
+    } catch (err) {
+      console.error('Unable to copy to clipboard', err);
     }
   };
+
+  const updateInputWithUrl = (clickedUrl: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    setUrlToShare(clickedUrl);
+    copyToClipboard();
+  };
+
+  const generateSocialMediaProfiles = (): SocialMediaProfile[] => {
+    const socialMediaProfilesData = [
+      { name: "Twitter", url: "https://www.twitter.com/your-twitter-profile" },
+      { name: "LinkedIn", url: "https://www.linkedin.com/in/your-linkedin-profile" },
+      { name: "Facebook", url: "https://www.facebook.com/your-facebook-profile" },
+      { name: "Instagram", url: "https://www.instagram.com/your-instagram-profile" },
+      { name: "Pinterest", url: "https://www.pinterest.com/your-pinterest-profile" },
+      { name: "Telegram", url: "https://www.telegram.org/your-telegram-profile" }
+    ];
+
+    return socialMediaProfilesData.map((profile, index) => ({
+      key: index,
+      url: profile.url,
+      onClick: (e: React.MouseEvent) => updateInputWithUrl(profile.url, e),
+      style: { marginRight: 10, height: 50, width: 50 }
+    }));
+  };
+
+  const socialMediaProfiles = generateSocialMediaProfiles();
 
   return (
     <>
       <div className="card">
         <h3>Share the link</h3>
         <div className='socialIcons'>
-          <div><SocialIcon url="www.twitter.com" className="custom-class" fgColor="currentColor"  style={{marginRight: 10, height:40, width: 40  }}/></div>
-        
-        <SocialIcon url="www.linkedin.com"  style={{marginRight: 10, height:40, width: 40 }}/>
-        <SocialIcon url="www.facebook.com"  style={{marginRight: 10, height:40, width: 40  }} />
-        <SocialIcon url="www.instagram.com"  style={{marginRight: 10, height:40, width: 40  }} />
-        <SocialIcon url="www.pinterest.com"   style={{marginRight: 10, height:40, width: 40  }}/>
-        <SocialIcon url="www.telegram.com"  style={{height:40, width: 40  }}/>
+          {socialMediaProfiles.map((profile) => (
+            <SocialIcon key={profile.key} url={profile.url} onClick={profile.onClick} style={profile.style} />
+          ))}
         </div>
-        
-        
-      <div style={{ position: 'relative' }}>
-        <input
-          type="text"
-          value={urlToShare}
-          style={{ display: urlToShare ? 'block' : 'none' }}
-          readOnly
-        />
-        {urlToShare && (
-          <button
-            onClick={copyToClipboard}
-            style={{
-              position: 'absolute',
-              right: '10px',
-              top: '5px',
-              padding: '5px',
-            }}
-          >
-            Copy
-          </button>
-        )}
-      </div>
+        <div><p>or copy link</p></div>
+        <div className="searchbox-wrap">
+          <input
+            type="text"
+            value={urlToShare}
+          />
+          <button onClick={copyToClipboard}><span>Copy</span> </button>
+        </div>
+        <Toaster />
       </div>
     </>
-  )
+  );
 }
 
-
-export default App
+export default App;
